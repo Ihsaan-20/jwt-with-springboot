@@ -3,6 +3,7 @@ package com.example.simple_jwt_login.services;
 import com.example.simple_jwt_login.dto.JwtResponse;
 import com.example.simple_jwt_login.dto.LoginRequest;
 import com.example.simple_jwt_login.dto.RegisterRequest;
+import com.example.simple_jwt_login.dto.UserView;
 import com.example.simple_jwt_login.entity.Role;
 import com.example.simple_jwt_login.entity.User;
 import com.example.simple_jwt_login.repo.UserRepository;
@@ -13,6 +14,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class AuthService {
@@ -21,6 +24,18 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtUtil jwtUtil;
+
+    public List<UserView> showProjectedUsers() {
+        List<UserView> users = userRepository.findAllProjectedUsers();
+
+        // Optional: Debug print
+        for (UserView user : users) {
+            System.out.println("Username: " + user.getUsername() + ", Role: " + user.getRole());
+        }
+
+        return users; // ✅ RETURN karna zaroori hai
+    }
+
 
     public void register(RegisterRequest request) {
         Role role = Role.valueOf(request.getRole().toUpperCase());
